@@ -3,10 +3,11 @@ public class Decks {
     Random rd = new Random(System.currentTimeMillis());
 
     private String[] DeckColors = {"B", "R", "G", "Y"};     //BLUE,RED,GREEN,YELLOW
-    private int[] DeckNumbers = {1,2,3,4,5,6,7,8,9,10};
+    private String[] DeckNumbers = {"1","2","3","4","5","6","7","8","9","10"};
+    private String[] BeforeDeck = new String[40];           //FOR BEFORE SHUFFLE
+    public String[] deck = new String[40];                  //FOR AFTER SHUFFLE
     
     public Deck(){
-        String [] BeforeDeck = new String[40];
         int counter = 0;
         for(int i=0; i<4; i++){
             for(int i2=0; i2<10; i2++){
@@ -21,7 +22,7 @@ public class Decks {
         for(int i=0; i<BeforeDeck.length; i++){
           System.out.println(BeforeDeck[i]);
         }
-        String[] deck = new String[BeforeDeck.length];
+        //THIS PART TO SHUFFLE
         for(int i= 0; i<deck.length; i++){
             int a = rd.nextInt(0,40);
             while(BeforeDeck[a]=="0"){
@@ -40,7 +41,7 @@ public class Decks {
     public void setDeckColors(String colors){
         DeckColors = colors;
     }
-    public void setDeckNumbers(int numbers){
+    public void setDeckNumbers(String numbers){
         DeckNumbers = numbers;
     }
     public  getDeckColors() {
