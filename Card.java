@@ -1,12 +1,11 @@
 public class Card {
     private String color;
     private int value;
-
-    Card(String color, int value){ // bu kısım herhangi bir değer almıyor
+    
+    public Card(String color, int value){ // bu kısım herhangi bir değer almıyor
         this.color = color;
         this.value = value;
     }
-
     public Card(){   
     }
     public String getColor(){
