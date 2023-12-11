@@ -1,8 +1,8 @@
 import java.util.Random;
 public class Decks {
     Random rd = new Random(System.currentTimeMillis());
-    public Card[] deck;
-    public Card[] tempDeck;
+    Card[] deck;
+    Card[] tempDeck;
     Card[] firstComputerCards = new Card[10]; // BEFORE SELECT 4 RANDOM CARDS
     Card[] firstPlayerCards = new Card[10]; //BEFORE SELECT 4 RANDOM CARDS
     String[] colors = {"R", "G", "Y", "B"};
