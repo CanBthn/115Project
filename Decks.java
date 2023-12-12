@@ -8,7 +8,6 @@ public class Decks {
     String[] colors = {"R", "G", "Y", "B"};
     int idx = 0;
 
-    //THIS DECKS TO PLAY GAME
     Card[] playerDeck = new Card[4];
     Card[] computerDeck= new Card[4];
     Card[] tableDeck = new Card[30];
@@ -64,7 +63,7 @@ public class Decks {
             System.out.print(deck[i].getColor()+deck[i].getValue() + " ");
         }System.out.println();
         System.out.println("**************");
-        System.out.print("The first card of the game will be drawn from the end,\n" 
+        System.out.print(" The first card of the game will be drawn from the end,\n" 
                                 + " the first card will be given to the player,\n" 
                                 + " the second card will be drawn from the beginning and\n" 
                                 + " the second card will be given to the computer and this process will be repeated 5 times.\n**************");
@@ -127,7 +126,7 @@ public class Decks {
                 int lucky = rd.nextInt(0,2);
                 if(lucky == 0){
                     tempRV1[countCardsOrder] = (tempRV1[countCardsOrder]*0)-1;
-                    tempRC1[countCardsOrder]= "FLIP ";
+                    tempRC1[countCardsOrder]= "FLIP";
                 }
                 else {
                     tempRV1[countCardsOrder]= (tempRV1[countCardsOrder]*0)+2;
@@ -189,7 +188,7 @@ public class Decks {
                 int lucky = rd.nextInt(0,2);
                 if(lucky == 0){
                     tempRV2[countCardsOrder] = (tempRV2[countCardsOrder]*0)-1;
-                    tempRC2[countCardsOrder]= "FLIP ";
+                    tempRC2[countCardsOrder]= "FLIP";
                 }
                 else {
                     tempRV2[countCardsOrder]= (tempRV2[countCardsOrder]*0)+2;
@@ -208,7 +207,8 @@ public class Decks {
     }
     //TO SELECT RANDOM GAME CARDS AND AFTER DEAL DECK
     public void GameCards(){
-        System.out.print("**************\nCOMPUTER CARDS\n");
+        
+        /*System.out.print("**************\nCOMPUTER CARDS\n");
         for(int i=0; i<10; i++){
             System.out.print(firstComputerCards[i].getColor()+firstComputerCards[i].getValue()+",");
         }
@@ -216,7 +216,8 @@ public class Decks {
         System.out.print("**************\nPLAYER CARDS\n");
         for(int i=0; i<10; i++){
             System.out.print(firstPlayerCards[i].getColor()+firstPlayerCards[i].getValue()+",");
-        }
+        }*/
+        
         int random = rd.nextInt(0,10);
         int[] controlarray = {1,1,1,1,1,1,1,1,1,1};
         for(int i = 0; i<4; i++){
@@ -239,8 +240,7 @@ public class Decks {
             playerDeck[i] = firstPlayerCards[random];
             controlarray2[random]=0;
             }
-        System.out.println();
-        System.out.println("**************\nCOMPUTER DECK");
+        /*System.out.println("**************\nCOMPUTER DECK");
         for(int i=0; i<4; i++){
             System.out.print(computerDeck[i].getColor()+computerDeck[i].getValue()+",");
         }
@@ -248,16 +248,17 @@ public class Decks {
         for(int i=0; i<4; i++){
             System.out.print(playerDeck[i].getColor()+playerDeck[i].getValue()+",");
         }
-        System.out.println();
-        System.out.println("**************\nDECK");
+        System.out.println("**************\nDECK");*/
+        System.out.println("PLAYERS IS STARTED\n**************");
         int counter3=5;
         for(int i = 0; i<30; i++){
             tableDeck[i]=tempDeck[counter3];
             counter3++;
         }
+        /*
         for(int i=0; i<30; i++){
             System.out.print(tableDeck[i].getColor()+tableDeck[i].getValue()+",");
         }
-        System.out.println();
+        System.out.println();*/
     }
 }
