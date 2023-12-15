@@ -2,19 +2,19 @@ import java.util.Random;
 public class Decks {
     Random rd = new Random(System.currentTimeMillis());
     Card[] deck;
-    Card[] tempDeck;
+    Card[] tempDeck;                            //This array is to prevent the deck from changing in distribution.
     Card[] firstComputerCards = new Card[10]; // BEFORE SELECT 4 RANDOM CARDS
     Card[] firstPlayerCards = new Card[10]; //BEFORE SELECT 4 RANDOM CARDS
-    String[] colors = {"R", "G", "Y", "B"};
-    int idx = 0;
+    private String[] colors = {"R", "G", "Y", "B"};// RED GREEN YELLOW BLUE
 
-    Card[] playerDeck = new Card[4];
-    Card[] computerDeck= new Card[4];
-    Card[] tableDeck = new Card[30];
+    Card[] playerDeck = new Card[4];        //After select 4 random card
+    Card[] computerDeck= new Card[4];       //After select 4 random card
+    Card[] tableDeck = new Card[30];        //After deal 10 card and 5-35 cards on deck
 
 
     //TO CREATE DECK
     public Decks(){
+        int idx=0;
         deck = new Card[40];
         tempDeck= new Card[40];
         for(int i = 0; i<4; i++){
@@ -31,18 +31,18 @@ public class Decks {
     }
     //TO SHOW BEFORE SHUFFLE
     public void PrintBeforeShuffle(){
-        System.out.println("GAME İS STARTED\n**************");
-        System.out.println("BEFORE SHUFFLE CARD");
+        System.out.println("Game Is Started\n**************");
+        System.out.println("Before Shuffle Card");
         for(int i = 0; i<40; i++){
             System.out.print(deck[i].getColor()+deck[i].getValue() + " ");
         }System.out.print("\n");
     }
     //TO SHUFFLE AND SHOW AFTER SHUFFLE
     public void Shuffle(){
-        System.out.println("CARDS ARE SHUFFLED");
+        System.out.println("Cards Are Shuffled");
         int a = rd.nextInt(0,40);
-        String[] tempS = new String[40];
-        int[] tempI = new int[40];
+        String[] tempS = new String[40];        //Temp string
+        int[] tempI = new int[40];              //Temp int
         for(int i=0; i<40; i++){
             tempS[i] = deck[i].getColor();
             tempI[i] = deck[i].getValue();
@@ -58,7 +58,7 @@ public class Decks {
             tempS[a]=null;
             tempI[a]=0;
         }
-        System.out.println("AFTER SHUFFLE CARD");
+        System.out.println("After Shuffle Card");
         for(int i = 0; i<40; i++){
             System.out.print(deck[i].getColor()+deck[i].getValue() + " ");
         }System.out.println();
@@ -71,8 +71,8 @@ public class Decks {
     }
     //TO CREATE RANDOM 5 CARD
     public void dealCard(){
-        String[] tempRC1 = new String[5];
-        int[] tempRV1 = new int[5];
+        String[] tempRC1 = new String[5];       //Temp random color 1
+        int[] tempRV1 = new int[5];             //Temp random value 1
         int idx=39;
         //THIS PART FOR FIRST 5 CARD
         for(int i=0; i<5; i++){
@@ -80,7 +80,7 @@ public class Decks {
             firstPlayerCards[i] = deck[idx];
             idx--;
         }
-        String[] tempTDC = new String[5];
+        String[] tempTDC = new String[5];   
         int[] tempTDV = new int[5];
         int counter = 5;
         for(int i=0; i<5; i++){
@@ -88,7 +88,7 @@ public class Decks {
             tempTDV[i]=deck[counter].getValue();
             counter++;
         }
-        System.out.println("CARDS WERE DEALT \nRANDOM CARDS ARE CREATED");
+        System.out.println("Cards Were Dealt\nRandom Cards Are Created");
         //FIRST RANDOM CARD
         for(int i = 0; i<3; i++){
             int a = rd.nextInt(0,4);
@@ -150,8 +150,8 @@ public class Decks {
         
         
         //SECOND RANDOM CARD
-        String[] tempRC2 = new String[5];
-        int[] tempRV2 = new int[5];
+        String[] tempRC2 = new String[5];       // Temp random color 2
+        int[] tempRV2 = new int[5];             // Temp random value 2
         for(int i = 0; i<3; i++){
             a = rd.nextInt(0,4);
             int b = rd.nextInt(1, 7);
@@ -249,7 +249,7 @@ public class Decks {
             System.out.print(playerDeck[i].getColor()+playerDeck[i].getValue()+",");
         }
         System.out.println("**************\nDECK");*/
-        System.out.println("PLAYERS IS STARTED\n**************");
+        System.out.println("Players Is Started\n**************");
         int counter3=5;
         for(int i = 0; i<30; i++){
             tableDeck[i]=tempDeck[counter3];
