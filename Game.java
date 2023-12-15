@@ -17,6 +17,11 @@ public class Game{
     static boolean controlComputerStop2=true;
     static boolean a = true; // For the player
     static boolean arrayNull=true;
+    static int counterForArrayNullComputer = 0;
+    static int counterForArrayNullPlayer = 0;
+    static int controlRound = 0;
+    static int controlRoundForFirst=0;
+    
     //THIS DECKS TO PLAY GAME
     static Card[] computerBoard = new Card[9];
     static Card[] playerBoard = new Card[9];
@@ -33,6 +38,7 @@ public class Game{
                 System.out.println("Player Score +1");
                 sumScorePlayer++;
             }
+            controlRound++;
             boardCardCounter=1;
             sumVComp=0;
             sumVPlay=0;
@@ -46,6 +52,7 @@ public class Game{
             }if(controlForComp==controlForPlay){
                 System.out.println("Totals Equal Score Unchanged.");
             }
+            controlRound++;
             boardCardCounter=1;
             sumVComp=0;
             sumVPlay=0;
@@ -59,6 +66,7 @@ public class Game{
             }if(controlForComp==controlForPlay){
                 System.out.println("Totals Equal Score Unchanged.");
                 }
+                controlRound++;
                 boardCardCounter=1;
             }
         System.out.println("COMPUTER SCORE = " + sumScoreComputer + " / PLAYER SCORE = " + sumScorePlayer);
@@ -82,40 +90,62 @@ public class Game{
                     if(playerBoard[8]==null){
                         int[] playerDeckControl = {1,1,1,1};
                         Scanner sc = new Scanner(System.in);
+                        if(controlRoundForFirst==0){
+                        System.out.println("Press 1 To Draw A Card, 2 To Discard Your Card, 3 To Dıscontinue"
+                                            +"\nFirst round can not press 1");
+                        }
+                        else{
                         System.out.println("Press 1 To Draw A Card, 2 To Discard Your Card, 3 To Dıscontinue");
+                        }
                         int which = sc.nextInt();
+                        while(controlRoundForFirst==0){
                         while(which>=4 && which <=0){
                             System.out.println("Please Enter Valid Value");
                             which = sc.nextInt();
                         }
+                        if(controlRoundForFirst==0 || which==1 || which==2 || which==3){
+                            controlRoundForFirst++;
+                            if(which==1){
+                                controlRoundForFirst--;
+                                while(controlRoundForFirst==0){
+                                System.out.println("Please Enter Valid Value");
+                                which = sc.nextInt();
+                                if(which!=1){
+                                    controlRoundForFirst++;
+                                    break;
+                                }
+                    }
+                }
+            }
+        }
                         switch(which){
                             case 1:
                             System.out.println("Which Card Do You Want To Dıscard?");
-                            which=sc.nextInt();
-                            while(which>=4 && which <=0){
+                            int which2=sc.nextInt();
+                            while(which2>=4 && which2 <=0){
                                 System.out.println("Please Enter Valid Value");
-                                which = sc.nextInt();
+                                which2 = sc.nextInt();
                             }
-                            while(playerDeckControl[which]==0){
+                            while(playerDeckControl[which2]==0){
                                 System.out.println("Card Dıscarded.Please Enter Select Another Card");
-                                which=sc.nextInt();
-                                while(which>=4 && which <=0){
+                                which2=sc.nextInt();
+                                while(which2>=4 && which2<=0){
                                     System.out.println("Please Enter Valid Value");
-                                which = sc.nextInt();
+                                which2 = sc.nextInt();
                                 }
                             }
-                            if(playerDeck[which].getColor()=="FLIP"){
+                            if(playerDeck[which2].getColor()=="FLIP"){
                                 sumVPlay -= playerBoard[i-1].getValue();
                             }
-                            else if(playerDeck[which].getColor()=="DOUBLE(X)"){
+                            else if(playerDeck[which2].getColor()=="DOUBLE(X)"){
                                 sumVPlay += playerBoard[i-1].getValue();
                             }
                             else {
-                                sumVPlay += playerDeck[which].getValue();
+                                sumVPlay += playerDeck[which2].getValue();
                             }
-                            playerBoard[i] = playerDeck[which];
-                            playerDeckControl[which]=0;
-                            playerDeck[which]=null;
+                            playerBoard[i] = playerDeck[which2];
+                            playerDeckControl[which2]=0;
+                            playerDeck[which2]=null;
                             cardCounter++;
                             i++;
                             a=false;
@@ -156,7 +186,7 @@ public class Game{
             }
         }
     public static void cardPrint(){
-        if(sumScoreComputer>0 || sumScorePlayer>0){
+        if(sumScoreComputer>0 || sumScorePlayer>0){ //ilk round sonrası buraya girecek
             System.out.println("************\nCOMPUTER CARD");
             for(int i = 0; i<4 ; i++){
                 if(computerDeck[i]==null){ System.out.print(" ");
@@ -185,7 +215,7 @@ public class Game{
                     else System.out.print(playerBoard[i].getColor()+playerBoard[i].getValue()+ " ");
                 }        System.out.println("\n************");
             }
-    else{
+    else{ //ilk round buraya girecek
         System.out.println("************\nCOMPUTER CARD");
         for(int i = 0; i<4 ; i++){
             if(computerDeck[i]==null){ System.out.print(" ");
@@ -320,121 +350,96 @@ public class Game{
                     }
                 }
 
-        public static void arrayNull1(int sumScoreComputer, int sumScorePlayer){
-            if(sumScoreComputer==1 || sumScorePlayer==1){
-                for(int i=0; i<9; i++){
-                    playerBoard[i]=null;
+        public static void arrayNull(int computer, int player){
+            if(controlRound==1){
+                for(int i=0; i<computer; i++){
                     computerBoard[i]=null;
-                }
-            }
+                }for(int i=0; i<player; i++){
+                    playerBoard[i]=null;
+            }counterForArrayNullComputer=0;
+            counterForArrayNullPlayer=0;
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
+            if(controlRound==2){
+                for(int i=0; i<computer; i++){
+                    computerBoard[i]=null;
+                }for(int i=0; i<player; i++){
+                    playerBoard[i]=null;
+            }counterForArrayNullComputer=0;
+            counterForArrayNullPlayer=0;
+        }
+            if(controlRound==3){
+                for(int i=0; i<computer; i++){
+                    computerBoard[i]=null;
+                }for(int i=0; i<player; i++){
+                    playerBoard[i]=null;
+            }counterForArrayNullComputer=0;
+            counterForArrayNullPlayer=0;
+        }
+            if(controlRound==4){
+                for(int i=0; i<computer; i++){
+                    computerBoard[i]=null;
+                }for(int i=0; i<player; i++){
+                    playerBoard[i]=null;
+            }counterForArrayNullComputer=0;
+            counterForArrayNullPlayer=0;
+        }
+            if(controlRound==5){
+                for(int i=0; i<computer; i++){
+                    computerBoard[i]=null;
+                }for(int i=0; i<player; i++){
+                    playerBoard[i]=null;
+            }counterForArrayNullComputer=0;
+            counterForArrayNullPlayer=0;
+        }
+            if(controlRound==6){
+                for(int i=0; i<computer; i++){
+                    computerBoard[i]=null;
+                }for(int i=0; i<player; i++){
+                    playerBoard[i]=null;
+            }counterForArrayNullComputer=0;
+            counterForArrayNullPlayer=0;
+        }
+            if(controlRound==7){
+                for(int i=0; i<computer; i++){
+                    computerBoard[i]=null;
+                }for(int i=0; i<player; i++){
+                    playerBoard[i]=null;
+            }counterForArrayNullComputer=0;
+            counterForArrayNullPlayer=0;
+        }
+            if(controlRound==8){
+                for(int i=0; i<computer; i++){
+                    computerBoard[i]=null;
+                }for(int i=0; i<player; i++){
+                    playerBoard[i]=null;
+            }counterForArrayNullComputer=0;
+            counterForArrayNullPlayer=0;
+        }
+            if(controlRound==8){
+                for(int i=0; i<computer; i++){
+                    computerBoard[i]=null;
+                }for(int i=0; i<player; i++){
+                    playerBoard[i]=null;
+            }counterForArrayNullComputer=0;
+            counterForArrayNullPlayer=0;
+        }
+            if(controlRound==9){
+                for(int i=0; i<computer; i++){
+                    computerBoard[i]=null;
+                }for(int i=0; i<player; i++){
+                    playerBoard[i]=null;
+            }counterForArrayNullComputer=0;
+            counterForArrayNullPlayer=0;
+        }
+            if(controlRound==10){
+                for(int i=0; i<computer; i++){
+                    computerBoard[i]=null;
+                }for(int i=0; i<player; i++){
+                    playerBoard[i]=null;
+            }counterForArrayNullComputer=0;
+            counterForArrayNullPlayer=0;
+        }
+        }
         public static void main(String[] args){
         Decks accessD = new Decks();
         //Bu kısım deckte hazırladığım oyun arraylerini burada rahat kullanmak için aktardığım kısım.
@@ -447,26 +452,31 @@ public class Game{
         accessD.GameCards();
         int a = 0;
         while(sumScoreComputer<3 && sumScorePlayer<3){
-            
+            //buradan
             if(a==0){ cardPrint(); 
                 a++;
             }
+            //buraya kadar tamam
             if(controlPlayerStop!=1){
                 PlayerUseCard(playerBoard);
+                counterForArrayNullPlayer++;
             } else controlPlayerStop2=false;
             if(sumVComp<20){
                 ComputerUseCard(computerBoard);
+                counterForArrayNullComputer++;
             } else controlComputerStop2=false;
+            //buradan
             if(playerBoard[8]!=null){
                     cardPrint();
                         System.out.println("Player reaches maximum number of cards");
                         break;
                     }else{
                         cardPrint();
-                    }  
+                    }
+            //buraya kadar tamam
                 controlWinner(sumVComp, sumVPlay);
                 whoWin(sumScoreComputer, sumScorePlayer);
-                //arrayNull1(sumScoreComputer, sumScorePlayer);
+                arrayNull(counterForArrayNullComputer, counterForArrayNullPlayer);
                 }
             }
-        }
+}
