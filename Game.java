@@ -1,16 +1,7 @@
 import java.util.Scanner;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.nio.file.Path;
 import java.util.Random;
 
 public class Game{
-    static int deneme =0;
-    static boolean c = false;
-    static boolean round = true;
     static int sumVComp=0; //Computer sum cards values
     static int sumVPlay=0; //Player sum cards values
     static int sumScoreComputer = 0; //Computer Score
@@ -19,21 +10,23 @@ public class Game{
     static int computerCCounter2=0;
     static int cardCounter = 0;
     static int boardCardCounter=0;
+    static boolean c = false;
+    static boolean round = true;
     static int i = 0;
     static int fp=0; //first round player
     static int sp=0; //second round player
     static int tp=0; //third round player
+    static int fc=0; //first round computer
+    static int sc=0; //second round computer
+    static int tc=0; //third round computer
+
     static int controlComputerNo=1;
     static int controlPlayerNo=0;
     static int controlPlayerStop=1;
     static int controlComputerStop=1;
     static boolean a = true; // For the player
-    static boolean arrayNull=true;
-    static int counterForArrayNullComputer = 0;
-    static int counterForArrayNullPlayer = 0;
     static int controlRound = 0;
     static int controlRoundForFirst=0;
-    static int controlRoundForFirst2=0;  
     //THIS DECKS TO PLAY GAME
     static Card[] computerBoard = new Card[9];
     static Card[] playerBoard = new Card[9];
@@ -50,10 +43,6 @@ public class Game{
                     System.out.println("Player Score +1");
                     sumScorePlayer++;
                 }
-                controlRound++;
-                boardCardCounter=1;
-                sumVComp=0;
-                sumVPlay=0;
             }else if(playerBoard[8]!=null && computerBoard[8]!=null){
                 if(controlForComp>controlForPlay){
                     System.out.println("Computer Score +1");
@@ -64,10 +53,6 @@ public class Game{
                 }if(controlForComp==controlForPlay){
                     System.out.println("Totals Equal Score Unchanged.");
                 }
-                    controlRound++;
-                    boardCardCounter=1;
-                    sumVComp=0;
-                    sumVPlay=0;
                 }
                 else if(playerBoard[8]==null && computerBoard[8]==null){
                     if(controlForComp>controlForPlay){
@@ -78,6 +63,9 @@ public class Game{
                         sumScorePlayer++;
                     }if(controlForComp==controlForPlay){
                         System.out.println("Totals Equal Score Unchanged.");
+                        controlPlayerStop=0;
+                        controlComputerStop=0;
+                        controlComputerNo=0;
                     }
                         controlRound++;
                         boardCardCounter=1;
@@ -535,38 +523,8 @@ public class Game{
                 controlComputerNo=0;
             }
         }
-                }
+    }
     public static void cardPrint(){
-        if(sumScoreComputer>0 || sumScorePlayer>0){ //ilk round sonrası buraya girecek
-            System.out.println("************\nCOMPUTER CARD");
-            for(int i = 0; i<4 ; i++){
-                if(computerDeck[i]==null){ System.out.print(" ");
-                }
-                else{
-                    System.out.print(computerDeck[i].getColor()+computerDeck[i].getValue()+ " ");
-                }
-            }
-            System.out.print("\nCOMPUTER BOARD \t\t\tComputer Score " + sumVComp+ "\n");
-                for(int i = 0; i<9 ; i++){
-                    if(computerBoard[i]==null) System.out.print("x ");
-                    else System.out.print(computerBoard[i].getColor()+computerBoard[i].getValue()+ " ");
-                }
-            
-            System.out.println("\n************\nPLAYER CARD");
-            for(int i = 0; i<4 ; i++){
-                if(playerDeck[i]==null){ System.out.print(" ");
-                }
-                else{
-                System.out.print(playerDeck[i].getColor()+playerDeck[i].getValue()+ " ");
-                    }
-                }
-                System.out.println("\nPLAYER BOARD \t\t\tPlayer Score " + sumVPlay);
-                for(int i = 0; i<9 ; i++){
-                    if(playerBoard[i]==null) System.out.print("x ");
-                    else System.out.print(playerBoard[i].getColor()+playerBoard[i].getValue()+ " ");
-                }        System.out.println("\n************");
-            }
-    else{ //ilk round buraya girecek
         System.out.println("************\nCOMPUTER CARD");
         for(int i = 0; i<4 ; i++){
             if(computerDeck[i]==null){ System.out.print(" ");
@@ -595,10 +553,10 @@ public class Game{
                 else System.out.print(playerBoard[i].getColor()+playerBoard[i].getValue()+ " ");
             }        System.out.println("\n************");
         }
-   }
         public static void ComputerUseCard(Card[] comptCards){
             boolean a = true;
             boolean control =true;
+            if(controlRound==0){
                 if(sumVComp<20){
                         if(controlPlayerStop==0 && sumVComp>sumVPlay){
                             round =false;
@@ -650,7 +608,7 @@ public class Game{
                             }
                                 else continue;
                             }if(computerDeck[i].getValue()>0){
-                                if(20-computerDeck[i].getValue()>min){ // - lerde sorun var
+                                if(20-computerDeck[i].getValue()>min){
                                     d=i;
                                     computerBoard[computerCCounter]=computerDeck[d];
                                     sumVComp+=computerDeck[d].getValue();
@@ -719,6 +677,371 @@ public class Game{
                     }
                 }
             }
+            if(controlRound==1){
+                if(sumVComp<20){
+                        if(controlPlayerStop==0 && sumVComp>sumVPlay){
+                            round =false;
+                        }
+                        else round =true;
+                    }
+                    if(round==true){
+                    for(int i =0; i<4; i++){
+                        if(computerDeck[i]==null){
+                            continue;
+                        }
+                        if(computerDeck[i].getColor()=="B"){
+                            if(computerDeck[i].getValue()+sumVComp<20){
+                                computerBoard[fc]=computerDeck[i];
+                                sumVComp+=computerDeck[i].getValue();
+                                computerDeck[i]=null;
+                                fc++;
+                                a = false;
+                                control=false;
+                                i+=4;
+                            }
+                        }
+                    }while(a==true){
+                        for(int i =0; i<4; i++){
+                            if(i==3) a=false;
+                            if(computerDeck[i]==null){
+                                continue;
+                            }
+                            if(computerDeck[i].getColor()=="DOUBLE(X)" && sc!=0){
+                                if(computerDeck[i].getValue()+sumVComp<20){
+                                    computerBoard[fc]=computerDeck[i];
+                                    sumVComp+=computerBoard[fc-1].getValue();
+                                    computerDeck[i]=null;
+                                    fc++;
+                                    control=false;
+                                    i+=4;
+                                }
+                            }
+                        }
+                    }  
+                    while(control==true){
+                        int d = 0;
+                        int min =0;
+                        for(int i = 0; i<4; i++){
+                            if(computerDeck[i]==null){
+                                if(i==3){ 
+                                    control=false;
+                                    break;
+                            }
+                                else continue;
+                            }if(computerDeck[i].getValue()>0){
+                                if(20-computerDeck[i].getValue()>min){ // - lerde sorun var
+                                    d=i;
+                                    computerBoard[fc]=computerDeck[d];
+                                    sumVComp+=computerDeck[d].getValue();
+                                    fc++;
+                                    computerDeck[d]=null;
+                                    control=false;
+                                    i+=4;
+                            }
+                        }else{
+                            if(20+computerDeck[i].getValue()>min){
+                                d=i;
+                                computerBoard[fc]=computerDeck[d];
+                                sumVComp+=computerDeck[d].getValue();
+                                fc++;
+                                computerDeck[d]=null;
+                                control=false;
+                                i+=4;
+                            }
+                        }
+                        }
+                    }if(computerDeck[0]==null && computerDeck[1]==null && computerDeck[2]==null && computerDeck[3]==null){
+                        if(sumVComp+gameDeck[cardCounter].getValue()<=20){
+                            sumVComp+=gameDeck[cardCounter].getValue();
+                            computerBoard[fc]=gameDeck[cardCounter];
+                            fc++;
+                            cardCounter++;
+                        }
+                    }
+                }
+                            else if(sumVComp>20){
+                                for(int i =0; i<4; i++){
+                                if(i==3) a=false;
+                                if(computerDeck[i]==null){
+                                continue;
+                            }
+                            if(computerDeck[i].getColor()=="FLIP"){
+                                if((computerDeck[i].getValue()*-1)+sumVPlay<20){
+                                    computerBoard[fc]=computerDeck[i];
+                                    sumVComp -= computerBoard[fc-1].getValue();
+                                    computerDeck[i]=null;
+                                    fc++;
+                                    c = true;
+                                    i+=4;
+                                    }
+                                }
+                            }
+                        }
+                        else{
+                            if(controlPlayerStop==0 && sumVComp>sumVPlay){
+                            System.out.println("Computer Did Not Play Cards");
+                            controlComputerNo=0;
+                            controlComputerStop=0;
+                            }
+                            else if(controlPlayerStop==0 && sumVComp==sumVPlay){
+                                if(sumVComp+gameDeck[cardCounter].getValue()>20 && sumVComp+computerBoard[sc].getValue()>20){
+                                    System.out.println("Computer Did Not Play Cards");
+                                    controlComputerNo=0;
+                                    controlComputerStop=0;
+                                }
+                            else{
+                                sumVComp+=gameDeck[cardCounter].getValue();
+                                computerBoard[fc]=gameDeck[cardCounter];
+                                fc++;
+                                cardCounter++;
+                        }
+                    }
+                }
+            }
+        if(controlRound==2){
+            if(sumVComp<20){
+                    if(controlPlayerStop==0 && sumVComp>sumVPlay){
+                        round =false;
+                    }
+                    else round =true;
+                }
+                if(round==true){
+                for(int i =0; i<4; i++){
+                    if(computerDeck[i]==null){
+                        continue;
+                    }
+                    if(computerDeck[i].getColor()=="B"){
+                        if(computerDeck[i].getValue()+sumVComp<20){
+                            computerBoard[sc]=computerDeck[i];
+                            sumVComp+=computerDeck[i].getValue();
+                            computerDeck[i]=null;
+                            sc++;
+                            a = false;
+                            control=false;
+                            i+=4;
+                        }
+                    }
+                }while(a==true){
+                    for(int i =0; i<4; i++){
+                        if(i==3) a=false;
+                        if(computerDeck[i]==null){
+                            continue;
+                        }
+                        if(computerDeck[i].getColor()=="DOUBLE(X)" && sc!=0){
+                            if(computerDeck[i].getValue()+sumVComp<20){
+                                computerBoard[sc]=computerDeck[i];
+                                sumVComp+=computerBoard[sc-1].getValue();
+                                computerDeck[i]=null;
+                                sc++;
+                                control=false;
+                                i+=4;
+                            }
+                        }
+                    }
+                }  
+                while(control==true){
+                    int d = 0;
+                    int min =0;
+                    for(int i = 0; i<4; i++){
+                        if(computerDeck[i]==null){
+                            if(i==3){ 
+                                control=false;
+                                break;
+                        }
+                            else continue;
+                        }if(computerDeck[i].getValue()>0){
+                            if(20-computerDeck[i].getValue()>min){ // - lerde sorun var
+                                d=i;
+                                computerBoard[sc]=computerDeck[d];
+                                sumVComp+=computerDeck[d].getValue();
+                                sc++;
+                                computerDeck[d]=null;
+                                control=false;
+                                i+=4;
+                        }
+                    }else{
+                        if(20+computerDeck[i].getValue()>min){
+                            d=i;
+                            computerBoard[sc]=computerDeck[d];
+                            sumVComp+=computerDeck[d].getValue();
+                            sc++;
+                            computerDeck[d]=null;
+                            control=false;
+                            i+=4;
+                        }
+                    }
+                    }
+                }if(computerDeck[0]==null && computerDeck[1]==null && computerDeck[2]==null && computerDeck[3]==null){
+                    if(sumVComp+gameDeck[cardCounter].getValue()<=20){
+                        sumVComp+=gameDeck[cardCounter].getValue();
+                        computerBoard[sc]=gameDeck[cardCounter];
+                        sc++;
+                        cardCounter++;
+                    }
+                }
+            }
+                        else if(sumVComp>20){
+                            for(int i =0; i<4; i++){
+                            if(i==3) a=false;
+                            if(computerDeck[i]==null){
+                            continue;
+                        }
+                        if(computerDeck[i].getColor()=="FLIP"){
+                            if((computerDeck[i].getValue()*-1)+sumVPlay<20){
+                                computerBoard[sc]=computerDeck[i];
+                                sumVComp -= computerBoard[sc-1].getValue();
+                                computerDeck[i]=null;
+                                sc++;
+                                c = true;
+                                i+=4;
+                                }
+                            }
+                        }
+                    }
+                    else{
+                        if(controlPlayerStop==0 && sumVComp>sumVPlay){
+                        System.out.println("Computer Did Not Play Cards");
+                        controlComputerNo=0;
+                        controlComputerStop=0;
+                        }
+                        else if(controlPlayerStop==0 && sumVComp==sumVPlay){
+                            if(sumVComp+gameDeck[cardCounter].getValue()>20 && sumVComp+computerBoard[computerCCounter].getValue()>20){
+                                System.out.println("Computer Did Not Play Cards");
+                                controlComputerNo=0;
+                                controlComputerStop=0;
+                            }
+                        else{
+                            sumVComp+=gameDeck[cardCounter].getValue();
+                            computerBoard[sc]=gameDeck[cardCounter];
+                            sc++;
+                            cardCounter++;
+                    }
+                }
+            }
+        }
+        if(controlRound==3){
+            if(sumVComp<20){
+                    if(controlPlayerStop==0 && sumVComp>sumVPlay){
+                        round =false;
+                    }
+                    else round =true;
+                }
+                if(round==true){
+                for(int i =0; i<4; i++){
+                    if(computerDeck[i]==null){
+                        continue;
+                    }
+                    if(computerDeck[i].getColor()=="B"){
+                        if(computerDeck[i].getValue()+sumVComp<20){
+                            computerBoard[fc]=computerDeck[i];
+                            sumVComp+=computerDeck[i].getValue();
+                            computerDeck[i]=null;
+                            fc++;
+                            a = false;
+                            control=false;
+                            i+=4;
+                        }
+                    }
+                }while(a==true){
+                    for(int i =0; i<4; i++){
+                        if(i==3) a=false;
+                        if(computerDeck[i]==null){
+                            continue;
+                        }
+                        if(computerDeck[i].getColor()=="DOUBLE(X)" && tc!=0){
+                            if(computerDeck[i].getValue()+sumVComp<20){
+                                computerBoard[fc]=computerDeck[i];
+                                sumVComp+=computerBoard[tc-1].getValue();
+                                computerDeck[i]=null;
+                                tc++;
+                                control=false;
+                                i+=4;
+                            }
+                        }
+                    }
+                }  
+                while(control==true){
+                    int d = 0;
+                    int min =0;
+                    for(int i = 0; i<4; i++){
+                        if(computerDeck[i]==null){
+                            if(i==3){ 
+                                control=false;
+                                break;
+                        }
+                            else continue;
+                        }if(computerDeck[i].getValue()>0){
+                            if(20-computerDeck[i].getValue()>min){ // - lerde sorun var
+                                d=i;
+                                computerBoard[tc]=computerDeck[d];
+                                sumVComp+=computerDeck[d].getValue();
+                                tc++;
+                                computerDeck[d]=null;
+                                control=false;
+                                i+=4;
+                        }
+                    }else{
+                        if(20+computerDeck[i].getValue()>min){
+                            d=i;
+                            computerBoard[tc]=computerDeck[d];
+                            sumVComp+=computerDeck[d].getValue();
+                            tc++;
+                            computerDeck[d]=null;
+                            control=false;
+                            i+=4;
+                        }
+                    }
+                    }
+                }if(computerDeck[0]==null && computerDeck[1]==null && computerDeck[2]==null && computerDeck[3]==null){
+                    if(sumVComp+gameDeck[cardCounter].getValue()<=20){
+                        sumVComp+=gameDeck[cardCounter].getValue();
+                        computerBoard[tc]=gameDeck[cardCounter];
+                        tc++;
+                        cardCounter++;
+                    }
+                }
+            }
+                        else if(sumVComp>20){
+                            for(int i =0; i<4; i++){
+                            if(i==3) a=false;
+                            if(computerDeck[i]==null){
+                            continue;
+                        }
+                        if(computerDeck[i].getColor()=="FLIP"){
+                            if((computerDeck[i].getValue()*-1)+sumVPlay<20){
+                                computerBoard[tc]=computerDeck[i];
+                                sumVComp -= computerBoard[tc-1].getValue();
+                                computerDeck[i]=null;
+                                tc++;
+                                c = true;
+                                i+=4;
+                                }
+                            }
+                        }
+                    }
+                    else{
+                        if(controlPlayerStop==0 && sumVComp>sumVPlay){
+                        System.out.println("Computer Did Not Play Cards");
+                        controlComputerNo=0;
+                        controlComputerStop=0;
+                        }
+                        else if(controlPlayerStop==0 && sumVComp==sumVPlay){
+                            if(sumVComp+gameDeck[cardCounter].getValue()>20 && sumVComp+computerBoard[computerCCounter].getValue()>20){
+                                System.out.println("Computer Did Not Play Cards");
+                                controlComputerNo=0;
+                                controlComputerStop=0;
+                            }
+                        else{
+                            sumVComp+=gameDeck[cardCounter].getValue();
+                            computerBoard[tc]=gameDeck[cardCounter];
+                            tc++;
+                            cardCounter++;
+                    }
+                }
+            }
+        }
+    }
+    
         public static void main(String[] args){
             Decks accessD = new Decks();
             computerDeck = accessD.computerDeck;
@@ -733,10 +1056,10 @@ public class Game{
                 if(a==0){ cardPrint(); 
                     a++;
                 }
-                if(controlPlayerStop==1){
+                if(controlPlayerStop==1 && sumVComp<=20){
                     PlayerUseCard(playerBoard);
                 }
-                if(controlComputerStop==1){
+                if(controlComputerStop==1 && sumVPlay<=20){
                     if(controlComputerNo==1){
                         ComputerUseCard(computerBoard);//- kart atılırsa o kısma bak bi > sumplay
                     }
@@ -756,8 +1079,6 @@ public class Game{
                         controlComputerStop=1;
                         controlComputerNo=1;
                 }
+            }
         }
-        
     }
-
-}
