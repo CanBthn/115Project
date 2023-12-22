@@ -1,1084 +1,153 @@
 import java.util.Scanner;
 import java.util.Random;
-
 public class Game{
-    static int sumVComp=0; //Computer sum cards values
-    static int sumVPlay=0; //Player sum cards values
-    static int sumScoreComputer = 0; //Computer Score
-    static int sumScorePlayer = 0; //Player Score
-    static int computerCCounter=0;
-    static int computerCCounter2=0;
-    static int cardCounter = 0;
-    static int boardCardCounter=0;
-    static boolean c = false;
-    static boolean round = true;
-    static int i = 0;
-    static int fp=0; //first round player
-    static int sp=0; //second round player
-    static int tp=0; //third round player
-    static int fc=0; //first round computer
-    static int sc=0; //second round computer
-    static int tc=0; //third round computer
+    static Card[] playerDeck = new Card[4];
+    static Card[] computerDeck = new Card[4];
+    static Card[] playerBoard = new Card[10];
+    static Card[] computerBoard = new Card[10];
+    static Card[] gameDeck = new Card[30];
+    static int sumScorePlayer = 0;
+    static int sumScoreComputer = 0;
+    static int sumValuePlayer = 0;
+    static int sumValueComputer = 0;
+    static int deckCardCounter = 0; //Destede kaçıncı kartın çekileceğini bize söyleyecek
+    static int playerCardCounter = 1;
+    static int computerCardCounter = 1;
+    
 
-    static int controlComputerNo=1;
-    static int controlPlayerNo=0;
-    static int controlPlayerStop=1;
-    static int controlComputerStop=1;
-    static boolean a = true; // For the player
-    static int controlRound = 0;
-    static int controlRoundForFirst=0;
-    //THIS DECKS TO PLAY GAME
-    static Card[] computerBoard = new Card[9];
-    static Card[] playerBoard = new Card[9];
-    static Card[] gameDeck;
-    static Card[] playerDeck;
-    static Card[] computerDeck;
-
-    public static void controlWinner(int controlForComp, int controlForPlay){
-            if(controlForComp>=20 || controlForPlay >=20){
-                if(controlForPlay>=20){
-                    System.out.println("Computer Score +1");
-                    sumScoreComputer++;
-                }if(controlForComp>=20){
-                    System.out.println("Player Score +1");
-                    sumScorePlayer++;
-                }
-            }else if(playerBoard[8]!=null && computerBoard[8]!=null){
-                if(controlForComp>controlForPlay){
-                    System.out.println("Computer Score +1");
-                    sumScoreComputer++;
-                }if(controlForPlay>controlForComp){
-                    System.out.println("Player Score +1");
-                    sumScorePlayer++;
-                }if(controlForComp==controlForPlay){
-                    System.out.println("Totals Equal Score Unchanged.");
-                }
-                }
-                else if(playerBoard[8]==null && computerBoard[8]==null){
-                    if(controlForComp>controlForPlay){
-                        System.out.println("Computer Score +1");
-                        sumScoreComputer++;
-                    }if(controlForPlay>controlForComp){
-                        System.out.println("Player Score +1");
-                        sumScorePlayer++;
-                    }if(controlForComp==controlForPlay){
-                        System.out.println("Totals Equal Score Unchanged.");
-                        controlPlayerStop=0;
-                        controlComputerStop=0;
-                        controlComputerNo=0;
-                    }
-                        controlRound++;
-                        boardCardCounter=1;
-                        sumVComp=0;
-                        sumVPlay=0;
-                    }
-            System.out.println("COMPUTER SCORE = " + sumScoreComputer + " / PLAYER SCORE = " + sumScorePlayer);
-        }
-
-    public static void whoWin(int sumScoreComputer, int sumScorePlayer){
-        if(sumScoreComputer==3 || sumScorePlayer==3){
-            if(sumScoreComputer>sumScorePlayer){
-                System.out.println("COMPUTER WIN");
+    public static void PrintCard(){
+        if(playerBoard[0] ==null && computerBoard[0] ==null){ // Burası her round 0 dan başlayınca deckten gelsin diye
+            playerBoard[0] = gameDeck[deckCardCounter];
+            computerBoard[0] = gameDeck[deckCardCounter+1];
+            sumValuePlayer+=gameDeck[deckCardCounter].getValue();
+            sumValueComputer+=gameDeck[deckCardCounter+1].getValue();
+            System.out.println("************\nPlayer Deck\t\t\tPlayer Score = " + sumValuePlayer);
+            for(int i = 0; i<4; i++){
+                if(playerDeck[i]==null) System.out.print(" ");
+                else System.out.print(playerDeck[i].getColor()+playerDeck[i].getValue() + ",");
+            }System.out.println("\nPlayer Board");
+            for(int i = 0; i<10; i++){
+                if(playerBoard[i]==null) System.out.print(" ");
+                else System.out.print(playerBoard[i].getColor()+playerBoard[i].getValue() + ",");
             }
-            if(sumScorePlayer>sumScoreComputer){
-                System.out.println("PLAYER WIN");
-            }
-        }
-        }
-    public static void PlayerUseCard(Card[] playerBoard){
-        if(controlRound==0){
-            if(sumVPlay<=20){
-                a = true;
-                while(a==true){
-                    try {
-                        if(playerBoard[8]==null){
-                            int[] playerDeckControl = {1,1,1,1};
-                            Scanner sc = new Scanner(System.in);
-                            if(controlRoundForFirst==0){
-                            System.out.println("Press 1 To Draw A Card, 2 To Discard Your Card, 3 To Dıscontinue"
-                                                +"\nFirst round can not press 1");
-                            }
-                            else{
-                            System.out.println("Press 1 To Draw A Card, 2 To Discard Your Card, 3 To Dıscontinue");
-                            }
-                            int which = sc.nextInt();
-                            while(controlRoundForFirst==0){
-                            while(which>=4 && which <=0){
-                                System.out.println("Please Enter Valid Value");
-                                which = sc.nextInt();
-                            }
-                            if(controlRoundForFirst==0 || which==1 || which==2 || which==3){
-                                controlRoundForFirst++;
-                                if(which==1){
-                                    controlRoundForFirst--;
-                                    while(controlRoundForFirst==0){
-                                    System.out.println("Please Enter Valid Value");
-                                    which = sc.nextInt();
-                                    if(which!=1){
-                                        controlRoundForFirst++;
-                                        break;
-                                    }
-                        }
-                    }
-                }
-            }
-                            switch(which){
-                                case 1:
-                                System.out.println("Which Card Do You Want To Dıscard?");
-                                int which2=sc.nextInt();
-                                while(which2>=4 && which2 <=0){
-                                    System.out.println("Please Enter Valid Value");
-                                    which2 = sc.nextInt();
-                                }
-                                while(playerDeckControl[which2]==0){
-                                    System.out.println("Card Dıscarded.Please Enter Select Another Card");
-                                    which2=sc.nextInt();
-                                    while(which2>=4 && which2<=0){
-                                        System.out.println("Please Enter Valid Value");
-                                    which2 = sc.nextInt();
-                                    }
-                                }
-                                if(playerDeck[which2].getColor()=="FLIP"){
-                                    sumVPlay -= playerBoard[i-1].getValue();
-                                }
-                                else if(playerDeck[which2].getColor()=="DOUBLE(X)"){
-                                    sumVPlay += playerBoard[i-1].getValue();
-                                }
-                                else {
-                                    sumVPlay += playerDeck[which2].getValue();
-                                }
-                                playerBoard[i] = playerDeck[which2];
-                                playerDeckControl[which2]=0;
-                                playerDeck[which2]=null;
-                                cardCounter++;
-                                i++;
-                                a=false;
-                                break;
-                            case 2:
-                                playerBoard[i]=gameDeck[cardCounter];
-                                cardCounter++;
-                                    if(gameDeck[cardCounter].getColor()=="DOUBLE(X)"){
-                                        sumVPlay += playerBoard[i-1].getValue();
-                                    }
-                                    else if(gameDeck[cardCounter].getColor()=="FLIP"){
-                                        sumVPlay -= playerBoard[i-1].getValue();
-                                    }else {
-                                        sumVPlay += playerBoard[i].getValue();
-                                    }
-                                i++;
-                                a=false;
-                                break;
-                            case 3:
-                                controlPlayerStop=0;
-                                a=false;
-                            }
-                        }
-                    else{
-                        a=false;
-                        controlPlayerStop=0;
-
-                    }  
-                }
-                catch (Exception InputMismatchException) {
-                        System.out.println("Please Enter Valid Value");
-                    }
-                }
-                if(cardCounter==0){
-                    cardCounter++;
-                    gameDeck[cardCounter-1]=null;
-                }else{
-                    gameDeck[cardCounter-1]=null;
-                                }
-                            }
-                            else{
-                                System.out.println("ne bu");
-                                controlPlayerStop=0;
-                                controlComputerStop=0;
-                                controlComputerNo=0;
-                            }
-                        }
-                        
-            if(controlRound==1){
-                if(sumVPlay<20){
-                a = true;
-                while(a==true){
-                    try {
-                    if(playerBoard[8]==null){
-                        int[] playerDeckControl = {1,1,1,1};
-                        Scanner sc = new Scanner(System.in);
-                        if(controlRoundForFirst==1){
-                        System.out.println("Press 1 To Draw A Card, 2 To Discard Your Card, 3 To Dıscontinue"
-                                            +"\nFirst round can not press 1");
-                        }
-                        else{
-                        System.out.println("Press 1 To Draw A Card, 2 To Discard Your Card, 3 To Dıscontinue");
-                        }
-                        int which = sc.nextInt();
-                        while(controlRoundForFirst==1){
-                        while(which>=4 && which <=0){
-                            System.out.println("Please Enter Valid Value");
-                            which = sc.nextInt();
-                        }
-                        if(controlRoundForFirst==1 || which==1 || which==2 || which==3){
-                            controlRoundForFirst++;
-                            if(which==1){
-                                controlRoundForFirst--;
-                                while(controlRoundForFirst==0){
-                                System.out.println("Please Enter Valid Value");
-                                which = sc.nextInt();
-                                if(which!=1){
-                                    controlRoundForFirst++;
-                                    break;
-                                }
-                    }
-                }
-            }
-        }
-                        switch(which){
-                            case 1:
-                            System.out.println("Which Card Do You Want To Dıscard?");
-                            int which2=sc.nextInt();
-                            while(which2>=4 && which2 <=0){
-                                System.out.println("Please Enter Valid Value");
-                                which2 = sc.nextInt();
-                            }
-                            while(playerDeckControl[which2]==0){
-                                System.out.println("Card Dıscarded.Please Enter Select Another Card");
-                                which2=sc.nextInt();
-                                while(which2>=4 && which2<=0){
-                                    System.out.println("Please Enter Valid Value");
-                                which2 = sc.nextInt();
-                                }
-                            }
-                            if(playerDeck[which2].getColor()=="FLIP"){
-                                sumVPlay -= playerBoard[fp-1].getValue();
-                            }
-                            else if(playerDeck[which2].getColor()=="DOUBLE(X)"){
-                                sumVPlay += playerBoard[fp-1].getValue();
-                            }
-                            else {
-                                sumVPlay += playerDeck[which2].getValue();
-                            }
-                            playerBoard[fp] = playerDeck[which2];
-                            playerDeckControl[which2]=0;
-                            playerDeck[which2]=null;
-                            cardCounter++;
-                            fp++;
-                            a=false;
-                            break;
-                        case 2:
-                            playerBoard[fp]=gameDeck[cardCounter];
-                            cardCounter++;
-                                if(gameDeck[cardCounter].getColor()=="DOUBLE(X)"){
-                                    sumVPlay += playerBoard[fp-1].getValue();
-                                }
-                                else if(gameDeck[cardCounter].getColor()=="FLIP"){
-                                    sumVPlay -= playerBoard[fp-1].getValue();
-                                }else {
-                                    sumVPlay += playerBoard[fp].getValue();
-                                }
-                            fp++;
-                            a=false;
-                            break;
-                        case 3:
-                            controlPlayerStop=0;
-                            a=false;
-                        }
-                    }
-            else{
-                    a=false;
-                    controlPlayerStop=0;
-
-                }  
-            }
-            catch (Exception InputMismatchException) {
-                    System.out.println("Please Enter Valid Value");
-                }
-            }
-            if(cardCounter==0){
-                cardCounter++;
-                gameDeck[cardCounter-1]=null;
-            }else{
-                gameDeck[cardCounter-1]=null;
-            }
+            System.out.println("\n************\nComputer Deck\t\t\tComputer Score = " + sumValueComputer);
+            for(int i = 0; i<4; i++){
+                if(computerDeck[i]==null) System.out.print(" ");
+                else System.out.print(computerDeck[i].getColor()+computerDeck[i].getValue() + ",");
+            }System.out.println("\nComputer Board");
+            for(int i = 0; i<10; i++){
+                if(computerBoard[i]==null) System.out.print(" ");
+                else System.out.print(computerBoard[i].getColor()+computerBoard[i].getValue() + ",");
+            }deckCardCounter +=2; //durmadan burada eklemeler yapacak
         }
         else{
-            controlPlayerStop=0;
-            controlComputerStop=0;
-            controlComputerNo=0;
-        }
-    }
-            if(controlRound==2){
-            if(sumVPlay<20){
-            a = true;
-            while(a==true){
-                try {
-                    if(playerBoard[8]==null){
-                        int[] playerDeckControl = {1,1,1,1};
-                        Scanner sc = new Scanner(System.in);
-                        if(controlRoundForFirst==1){
-                        System.out.println("Press 1 To Draw A Card, 2 To Discard Your Card, 3 To Dıscontinue"
-                                            +"\nFirst round can not press 1");
-                        }
-                        else{
-                        System.out.println("Press 1 To Draw A Card, 2 To Discard Your Card, 3 To Dıscontinue");
-                        }
-                        int which = sc.nextInt();
-                        while(which>=4 && which <=0){
-                            System.out.println("Please Enter Valid Value");
-                            which = sc.nextInt();
-                            if(controlRoundForFirst==1 || which==1 || which==2 || which==3){
-                            controlRoundForFirst++;
-                            if(which==1){
-                                controlRoundForFirst--;
-                                while(controlRoundForFirst==0){
-                                System.out.println("Please Enter Valid Value");
-                                which = sc.nextInt();
-                                if(which!=1){
-                                    controlRoundForFirst++;
-                                    break;
-                                }
-                    }
-                }
+            System.out.println("************\nPlayer Deck\t\t\tPlayer Score = " + sumValuePlayer);
+            for(int i = 0; i<4; i++){
+                if(playerDeck[i]==null) System.out.print(" ");
+                else System.out.print(playerDeck[i].getColor()+playerDeck[i].getValue() + ",");
+            }System.out.println("\nPlayer Board");
+            for(int i = 0; i<10; i++){
+                if(playerBoard[i]==null) System.out.print(" ");
+                else System.out.print(playerBoard[i].getColor()+playerBoard[i].getValue() + ",");
             }
-        }
-                        switch(which){
-                            case 1:
-                            System.out.println("Which Card Do You Want To Dıscard?");
-                            int which2=sc.nextInt();
-                            while(which2>=4 && which2 <=0){
-                                System.out.println("Please Enter Valid Value");
-                                which2 = sc.nextInt();
-                            }
-                            while(playerDeckControl[which2]==0){
-                                System.out.println("Card Dıscarded.Please Enter Select Another Card");
-                                which2=sc.nextInt();
-                                while(which2>=4 && which2<=0){
-                                    System.out.println("Please Enter Valid Value");
-                                which2 = sc.nextInt();
-                                }
-                            }
-                            if(playerDeck[which2].getColor()=="FLIP"){
-                                sumVPlay -= playerBoard[sp-1].getValue();
-                            }
-                            else if(playerDeck[which2].getColor()=="DOUBLE(X)"){
-                                sumVPlay += playerBoard[sp-1].getValue();
-                            }
-                            else {
-                                sumVPlay += playerDeck[which2].getValue();
-                            }
-                            playerBoard[sp] = playerDeck[which2];
-                            playerDeckControl[which2]=0;
-                            playerDeck[which2]=null;
-                            cardCounter++;
-                            sp++;
-                            a=false;
-                            break;
-                        case 2:
-                            playerBoard[sp]=gameDeck[cardCounter];
-                            cardCounter++;
-                                if(gameDeck[cardCounter].getColor()=="DOUBLE(X)"){
-                                    sumVPlay += playerBoard[sp-1].getValue();
-                                }
-                                else if(gameDeck[cardCounter].getColor()=="FLIP"){
-                                    sumVPlay -= playerBoard[sp-1].getValue();
-                                }else {
-                                    sumVPlay += playerBoard[sp].getValue();
-                                }
-                            sp++;
-                            a=false;
-                            break;
-                        case 3:
-                            controlPlayerStop=0;
-                            a=false;
-                        }
-                    }
-                else{
-                    a=false;
-                    controlPlayerStop=0;
-
-                }  
-            }
-            catch (Exception InputMismatchException) {
-                    System.out.println("Please Enter Valid Value");
-                }
-            }
-            if(cardCounter==0){
-                cardCounter++;
-                gameDeck[cardCounter-1]=null;
-            }else{
-                gameDeck[cardCounter-1]=null;
-            }
-            }
-            else{
-                controlPlayerStop=0;
-                controlComputerStop=0;
-                controlComputerNo=0;
-            }
-        }
-        if(controlRound==3){
-            if(sumVPlay<20){
-            a = true;
-            while(a==true){
-                try {
-                    if(playerBoard[8]==null){
-                        int[] playerDeckControl = {1,1,1,1};
-                        Scanner sc = new Scanner(System.in);
-                        if(controlRoundForFirst==1){
-                        System.out.println("Press 1 To Draw A Card, 2 To Discard Your Card, 3 To Dıscontinue"
-                                            +"\nFirst round can not press 1");
-                        }
-                        else{
-                        System.out.println("Press 1 To Draw A Card, 2 To Discard Your Card, 3 To Dıscontinue");
-                        }
-                        int which = sc.nextInt();
-                        while(which>=4 && which <=0){
-                            System.out.println("Please Enter Valid Value");
-                            which = sc.nextInt();
-                        if(controlRoundForFirst==1 || which==1 || which==2 || which==3){
-                            controlRoundForFirst++;
-                            if(which==1){
-                                controlRoundForFirst--;
-                                while(controlRoundForFirst==0){
-                                System.out.println("Please Enter Valid Value");
-                                which = sc.nextInt();
-                                if(which!=1){
-                                    controlRoundForFirst++;
-                                    break;
-                                }
-                    }
-                }
-            }
-        }
-                        switch(which){
-                            case 1:
-                            System.out.println("Which Card Do You Want To Dıscard?");
-                            int which2=sc.nextInt();
-                            while(which2>=4 && which2 <=0){
-                                System.out.println("Please Enter Valid Value");
-                                which2 = sc.nextInt();
-                            }
-                            while(playerDeckControl[which2]==0){
-                                System.out.println("Card Dıscarded.Please Enter Select Another Card");
-                                which2=sc.nextInt();
-                                while(which2>=4 && which2<=0){
-                                    System.out.println("Please Enter Valid Value");
-                                which2 = sc.nextInt();
-                                }
-                            }
-                            if(playerDeck[which2].getColor()=="FLIP"){
-                                sumVPlay -= playerBoard[tp-1].getValue();
-                            }
-                            else if(playerDeck[which2].getColor()=="DOUBLE(X)"){
-                                sumVPlay += playerBoard[tp-1].getValue();
-                            }
-                            else {
-                                sumVPlay += playerDeck[which2].getValue();
-                            }
-                            playerBoard[tp] = playerDeck[which2];
-                            playerDeckControl[which2]=0;
-                            playerDeck[which2]=null;
-                            cardCounter++;
-                            tp++;
-                            a=false;
-                            break;
-                        case 2:
-                            playerBoard[tp]=gameDeck[cardCounter];
-                            cardCounter++;
-                                if(gameDeck[cardCounter].getColor()=="DOUBLE(X)"){
-                                    sumVPlay += playerBoard[tp-1].getValue();
-                                }
-                                else if(gameDeck[cardCounter].getColor()=="FLIP"){
-                                    sumVPlay -= playerBoard[tp-1].getValue();
-                                }else {
-                                    sumVPlay += playerBoard[tp].getValue();
-                                }
-                                tp++;
-                            a=false;
-                            break;
-                        case 3:
-                            controlPlayerStop=0;
-                            a=false;
-                        }
-                    }
-                else{
-                    a=false;
-                    controlPlayerStop=0;
-
-                }  
-            }
-            catch (Exception InputMismatchException) {
-                    System.out.println("Please Enter Valid Value");
-                }
-            }
-            if(cardCounter==0){
-                cardCounter++;
-                gameDeck[cardCounter-1]=null;
-            }else{
-                gameDeck[cardCounter-1]=null;
-            }
-            }else{
-                controlPlayerStop=0;
-                controlComputerStop=0;
-                controlComputerNo=0;
+            System.out.println("\n************\nComputer Deck\t\t\tComputer Score = " + sumValueComputer);
+            for(int i = 0; i<4; i++){
+                if(computerDeck[i]==null) System.out.print(" ");
+                else System.out.print(computerDeck[i].getColor()+computerDeck[i].getValue() + ",");
+            }System.out.println("\nComputer Board");
+            for(int i = 0; i<10; i++){
+                if(computerBoard[i]==null) System.out.print(" ");
+                else System.out.print(computerBoard[i].getColor()+computerBoard[i].getValue() + ",");
             }
         }
     }
-    public static void cardPrint(){
-        System.out.println("************\nCOMPUTER CARD");
-        for(int i = 0; i<4 ; i++){
-            if(computerDeck[i]==null){ System.out.print(" ");
-            }
-            else{
-                System.out.print(computerDeck[i].getColor()+computerDeck[i].getValue()+ " ");
-            }
+    public static void playerUseCard(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("\n************\nPlayer starts the game \nThe first card came from the deck\nPress 1 to draw a card, 2 to throw a card, 3 to pause.");
+        int select = sc.nextInt();
+        while(select>3 || select<1){
+            System.out.println("Please enter valid value");
+            select = sc.nextInt();
         }
-        System.out.print("\nCOMPUTER BOARD \t\t\tComputer Score " + sumVComp+ "\n");
-        
-        for(int i = 0; i<9 ; i++){
-                if(computerBoard[i]==null) System.out.print("x ");
-                else System.out.print(computerBoard[i].getColor()+computerBoard[i].getValue()+ " ");
-            }
-        System.out.println("\n************\nPLAYER CARD");
-        for(int i = 0; i<4 ; i++){
-            if(playerDeck[i]==null){ System.out.print(" ");
-            }
-            else{
-            System.out.print(playerDeck[i].getColor()+playerDeck[i].getValue()+ " ");
+        switch(select){
+            case 1:
+                playerBoard[playerCardCounter] = gameDeck[deckCardCounter];
+                if(gameDeck[deckCardCounter].getColor()== "DOUBLE(X)") sumValuePlayer+=playerBoard[playerCardCounter-1].getValue();
+                else if(gameDeck[deckCardCounter].getColor()== "FLIP(X)") sumValuePlayer-=playerBoard[playerCardCounter-1].getValue();
+                else sumValuePlayer += gameDeck[deckCardCounter].getValue();
+                playerCardCounter++;
+                deckCardCounter++;
+                break;
+            case 2:
+                System.out.println("Which card do you want to discard?");
+                int selectCard = sc.nextInt();
+                if(selectCard>3 || selectCard<0){
+                    while(selectCard>3 || selectCard<0){
+                        System.out.println("Please enter valid value");
+                        selectCard = sc.nextInt();
+                        }
+                }else{
+                    while(playerDeck[selectCard]==null){
+                        System.out.println("Duplicate value.Please enter another value.");
+                        selectCard = sc.nextInt();
+                        while(selectCard>3 || selectCard<0){
+                            System.out.println("Please enter valid value");
+                            selectCard = sc.nextInt();
+                        }
+                    }
+                    playerBoard[playerCardCounter]=playerDeck[selectCard];
+                    if(playerDeck[selectCard].getColor()=="DOUBLE(X)") sumValuePlayer+=playerBoard[playerCardCounter-1].getValue();
+                    else if(playerDeck[selectCard].getColor()=="FLIP(X)") sumValuePlayer-=playerBoard[playerCardCounter-1].getValue();
+                    else sumValuePlayer+=playerDeck[selectCard].getValue();
+                    playerDeck[selectCard]=null;
+                    playerCardCounter++;
                 }
-            }
-            System.out.println("\nPLAYER BOARD \t\t\tPlayer Score " + sumVPlay);
-            for(int i = 0; i<9 ; i++){
-                if(playerBoard[i]==null) System.out.print("x ");
-                else System.out.print(playerBoard[i].getColor()+playerBoard[i].getValue()+ " ");
-            }        System.out.println("\n************");
-        }
-        public static void ComputerUseCard(Card[] comptCards){
-            boolean a = true;
-            boolean control =true;
-            if(controlRound==0){
-                if(sumVComp<20){
-                        if(controlPlayerStop==0 && sumVComp>sumVPlay){
-                            round =false;
-                        }
-                        else round =true;
-                    }
-                    if(round==true){
-                    for(int i =0; i<4; i++){
-                        if(computerDeck[i]==null){
-                            continue;
-                        }
-                        if(computerDeck[i].getColor()=="B"){
-                            if(computerDeck[i].getValue()+sumVComp<20){
-                                computerBoard[computerCCounter]=computerDeck[i];
-                                sumVComp+=computerDeck[i].getValue();
-                                computerDeck[i]=null;
-                                computerCCounter++;
-                                a = false;
-                                control=false;
-                                i+=4;
-                            }
-                        }
-                    }while(a==true){
-                        for(int i =0; i<4; i++){
-                            if(i==3) a=false;
-                            if(computerDeck[i]==null){
-                                continue;
-                            }
-                            if(computerDeck[i].getColor()=="DOUBLE(X)" && computerCCounter!=0){
-                                if(computerDeck[i].getValue()+sumVComp<20){
-                                    computerBoard[computerCCounter]=computerDeck[i];
-                                    sumVComp+=computerBoard[computerCCounter-1].getValue();
-                                    computerDeck[i]=null;
-                                    computerCCounter++;
-                                    control=false;
-                                    i+=4;
-                                }
-                            }
-                        }
-                    }  
-                    while(control==true){
-                        int d = 0;
-                        int min =0;
-                        for(int i = 0; i<4; i++){
-                            if(computerDeck[i]==null){
-                                if(i==3){ 
-                                    control=false;
-                                    break;
-                            }
-                                else continue;
-                            }if(computerDeck[i].getValue()>0){
-                                if(20-computerDeck[i].getValue()>min){
-                                    d=i;
-                                    computerBoard[computerCCounter]=computerDeck[d];
-                                    sumVComp+=computerDeck[d].getValue();
-                                    computerCCounter++;
-                                    computerDeck[d]=null;
-                                    control=false;
-                                    i+=4;
-                            }
-                        }else{
-                            if(20+computerDeck[i].getValue()>min){
-                                d=i;
-                                computerBoard[computerCCounter]=computerDeck[d];
-                                sumVComp+=computerDeck[d].getValue();
-                                computerCCounter++;
-                                computerDeck[d]=null;
-                                control=false;
-                                i+=4;
-                            }
-                        }
-                        }
-                    }if(computerDeck[0]==null && computerDeck[1]==null && computerDeck[2]==null && computerDeck[3]==null){
-                        if(sumVComp+gameDeck[cardCounter].getValue()<=20){
-                            sumVComp+=gameDeck[cardCounter].getValue();
-                            computerBoard[computerCCounter]=gameDeck[cardCounter];
-                            computerCCounter++;
-                            cardCounter++;
-                        }
-                    }
-                }
-                            else if(sumVComp>20){
-                                for(int i =0; i<4; i++){
-                                if(i==3) a=false;
-                                if(computerDeck[i]==null){
-                                continue;
-                            }
-                            if(computerDeck[i].getColor()=="FLIP"){
-                                if((computerDeck[i].getValue()*-1)+sumVPlay<20){
-                                    computerBoard[computerCCounter]=computerDeck[i];
-                                    sumVComp -= computerBoard[computerCCounter-1].getValue();
-                                    computerDeck[i]=null;
-                                    computerCCounter++;
-                                    c = true;
-                                    i+=4;
-                                    }
-                                }
-                            }
-                        }
-                        else{
-                            if(controlPlayerStop==0 && sumVComp>sumVPlay){
-                            System.out.println("Computer Did Not Play Cards");
-                            controlComputerNo=0;
-                            controlComputerStop=0;
-                            }
-                            else if(controlPlayerStop==0 && sumVComp==sumVPlay){
-                                if(sumVComp+gameDeck[cardCounter].getValue()>20 && sumVComp+computerBoard[computerCCounter].getValue()>20){
-                                    System.out.println("Computer Did Not Play Cards");
-                                    controlComputerNo=0;
-                                    controlComputerStop=0;
-                                }
-                            else{
-                                sumVComp+=gameDeck[cardCounter].getValue();
-                                computerBoard[computerCCounter]=gameDeck[cardCounter];
-                                computerCCounter++;
-                                cardCounter++;
-                        }
-                    }
-                }
-            }
-            if(controlRound==1){
-                if(sumVComp<20){
-                        if(controlPlayerStop==0 && sumVComp>sumVPlay){
-                            round =false;
-                        }
-                        else round =true;
-                    }
-                    if(round==true){
-                    for(int i =0; i<4; i++){
-                        if(computerDeck[i]==null){
-                            continue;
-                        }
-                        if(computerDeck[i].getColor()=="B"){
-                            if(computerDeck[i].getValue()+sumVComp<20){
-                                computerBoard[fc]=computerDeck[i];
-                                sumVComp+=computerDeck[i].getValue();
-                                computerDeck[i]=null;
-                                fc++;
-                                a = false;
-                                control=false;
-                                i+=4;
-                            }
-                        }
-                    }while(a==true){
-                        for(int i =0; i<4; i++){
-                            if(i==3) a=false;
-                            if(computerDeck[i]==null){
-                                continue;
-                            }
-                            if(computerDeck[i].getColor()=="DOUBLE(X)" && sc!=0){
-                                if(computerDeck[i].getValue()+sumVComp<20){
-                                    computerBoard[fc]=computerDeck[i];
-                                    sumVComp+=computerBoard[fc-1].getValue();
-                                    computerDeck[i]=null;
-                                    fc++;
-                                    control=false;
-                                    i+=4;
-                                }
-                            }
-                        }
-                    }  
-                    while(control==true){
-                        int d = 0;
-                        int min =0;
-                        for(int i = 0; i<4; i++){
-                            if(computerDeck[i]==null){
-                                if(i==3){ 
-                                    control=false;
-                                    break;
-                            }
-                                else continue;
-                            }if(computerDeck[i].getValue()>0){
-                                if(20-computerDeck[i].getValue()>min){ // - lerde sorun var
-                                    d=i;
-                                    computerBoard[fc]=computerDeck[d];
-                                    sumVComp+=computerDeck[d].getValue();
-                                    fc++;
-                                    computerDeck[d]=null;
-                                    control=false;
-                                    i+=4;
-                            }
-                        }else{
-                            if(20+computerDeck[i].getValue()>min){
-                                d=i;
-                                computerBoard[fc]=computerDeck[d];
-                                sumVComp+=computerDeck[d].getValue();
-                                fc++;
-                                computerDeck[d]=null;
-                                control=false;
-                                i+=4;
-                            }
-                        }
-                        }
-                    }if(computerDeck[0]==null && computerDeck[1]==null && computerDeck[2]==null && computerDeck[3]==null){
-                        if(sumVComp+gameDeck[cardCounter].getValue()<=20){
-                            sumVComp+=gameDeck[cardCounter].getValue();
-                            computerBoard[fc]=gameDeck[cardCounter];
-                            fc++;
-                            cardCounter++;
-                        }
-                    }
-                }
-                            else if(sumVComp>20){
-                                for(int i =0; i<4; i++){
-                                if(i==3) a=false;
-                                if(computerDeck[i]==null){
-                                continue;
-                            }
-                            if(computerDeck[i].getColor()=="FLIP"){
-                                if((computerDeck[i].getValue()*-1)+sumVPlay<20){
-                                    computerBoard[fc]=computerDeck[i];
-                                    sumVComp -= computerBoard[fc-1].getValue();
-                                    computerDeck[i]=null;
-                                    fc++;
-                                    c = true;
-                                    i+=4;
-                                    }
-                                }
-                            }
-                        }
-                        else{
-                            if(controlPlayerStop==0 && sumVComp>sumVPlay){
-                            System.out.println("Computer Did Not Play Cards");
-                            controlComputerNo=0;
-                            controlComputerStop=0;
-                            }
-                            else if(controlPlayerStop==0 && sumVComp==sumVPlay){
-                                if(sumVComp+gameDeck[cardCounter].getValue()>20 && sumVComp+computerBoard[sc].getValue()>20){
-                                    System.out.println("Computer Did Not Play Cards");
-                                    controlComputerNo=0;
-                                    controlComputerStop=0;
-                                }
-                            else{
-                                sumVComp+=gameDeck[cardCounter].getValue();
-                                computerBoard[fc]=gameDeck[cardCounter];
-                                fc++;
-                                cardCounter++;
-                        }
-                    }
-                }
-            }
-        if(controlRound==2){
-            if(sumVComp<20){
-                    if(controlPlayerStop==0 && sumVComp>sumVPlay){
-                        round =false;
-                    }
-                    else round =true;
-                }
-                if(round==true){
-                for(int i =0; i<4; i++){
-                    if(computerDeck[i]==null){
-                        continue;
-                    }
-                    if(computerDeck[i].getColor()=="B"){
-                        if(computerDeck[i].getValue()+sumVComp<20){
-                            computerBoard[sc]=computerDeck[i];
-                            sumVComp+=computerDeck[i].getValue();
-                            computerDeck[i]=null;
-                            sc++;
-                            a = false;
-                            control=false;
-                            i+=4;
-                        }
-                    }
-                }while(a==true){
-                    for(int i =0; i<4; i++){
-                        if(i==3) a=false;
-                        if(computerDeck[i]==null){
-                            continue;
-                        }
-                        if(computerDeck[i].getColor()=="DOUBLE(X)" && sc!=0){
-                            if(computerDeck[i].getValue()+sumVComp<20){
-                                computerBoard[sc]=computerDeck[i];
-                                sumVComp+=computerBoard[sc-1].getValue();
-                                computerDeck[i]=null;
-                                sc++;
-                                control=false;
-                                i+=4;
-                            }
-                        }
-                    }
-                }  
-                while(control==true){
-                    int d = 0;
-                    int min =0;
-                    for(int i = 0; i<4; i++){
-                        if(computerDeck[i]==null){
-                            if(i==3){ 
-                                control=false;
-                                break;
-                        }
-                            else continue;
-                        }if(computerDeck[i].getValue()>0){
-                            if(20-computerDeck[i].getValue()>min){ // - lerde sorun var
-                                d=i;
-                                computerBoard[sc]=computerDeck[d];
-                                sumVComp+=computerDeck[d].getValue();
-                                sc++;
-                                computerDeck[d]=null;
-                                control=false;
-                                i+=4;
-                        }
-                    }else{
-                        if(20+computerDeck[i].getValue()>min){
-                            d=i;
-                            computerBoard[sc]=computerDeck[d];
-                            sumVComp+=computerDeck[d].getValue();
-                            sc++;
-                            computerDeck[d]=null;
-                            control=false;
-                            i+=4;
-                        }
-                    }
-                    }
-                }if(computerDeck[0]==null && computerDeck[1]==null && computerDeck[2]==null && computerDeck[3]==null){
-                    if(sumVComp+gameDeck[cardCounter].getValue()<=20){
-                        sumVComp+=gameDeck[cardCounter].getValue();
-                        computerBoard[sc]=gameDeck[cardCounter];
-                        sc++;
-                        cardCounter++;
-                    }
-                }
-            }
-                        else if(sumVComp>20){
-                            for(int i =0; i<4; i++){
-                            if(i==3) a=false;
-                            if(computerDeck[i]==null){
-                            continue;
-                        }
-                        if(computerDeck[i].getColor()=="FLIP"){
-                            if((computerDeck[i].getValue()*-1)+sumVPlay<20){
-                                computerBoard[sc]=computerDeck[i];
-                                sumVComp -= computerBoard[sc-1].getValue();
-                                computerDeck[i]=null;
-                                sc++;
-                                c = true;
-                                i+=4;
-                                }
-                            }
-                        }
-                    }
-                    else{
-                        if(controlPlayerStop==0 && sumVComp>sumVPlay){
-                        System.out.println("Computer Did Not Play Cards");
-                        controlComputerNo=0;
-                        controlComputerStop=0;
-                        }
-                        else if(controlPlayerStop==0 && sumVComp==sumVPlay){
-                            if(sumVComp+gameDeck[cardCounter].getValue()>20 && sumVComp+computerBoard[computerCCounter].getValue()>20){
-                                System.out.println("Computer Did Not Play Cards");
-                                controlComputerNo=0;
-                                controlComputerStop=0;
-                            }
-                        else{
-                            sumVComp+=gameDeck[cardCounter].getValue();
-                            computerBoard[sc]=gameDeck[cardCounter];
-                            sc++;
-                            cardCounter++;
-                    }
-                }
-            }
-        }
-        if(controlRound==3){
-            if(sumVComp<20){
-                    if(controlPlayerStop==0 && sumVComp>sumVPlay){
-                        round =false;
-                    }
-                    else round =true;
-                }
-                if(round==true){
-                for(int i =0; i<4; i++){
-                    if(computerDeck[i]==null){
-                        continue;
-                    }
-                    if(computerDeck[i].getColor()=="B"){
-                        if(computerDeck[i].getValue()+sumVComp<20){
-                            computerBoard[fc]=computerDeck[i];
-                            sumVComp+=computerDeck[i].getValue();
-                            computerDeck[i]=null;
-                            fc++;
-                            a = false;
-                            control=false;
-                            i+=4;
-                        }
-                    }
-                }while(a==true){
-                    for(int i =0; i<4; i++){
-                        if(i==3) a=false;
-                        if(computerDeck[i]==null){
-                            continue;
-                        }
-                        if(computerDeck[i].getColor()=="DOUBLE(X)" && tc!=0){
-                            if(computerDeck[i].getValue()+sumVComp<20){
-                                computerBoard[fc]=computerDeck[i];
-                                sumVComp+=computerBoard[tc-1].getValue();
-                                computerDeck[i]=null;
-                                tc++;
-                                control=false;
-                                i+=4;
-                            }
-                        }
-                    }
-                }  
-                while(control==true){
-                    int d = 0;
-                    int min =0;
-                    for(int i = 0; i<4; i++){
-                        if(computerDeck[i]==null){
-                            if(i==3){ 
-                                control=false;
-                                break;
-                        }
-                            else continue;
-                        }if(computerDeck[i].getValue()>0){
-                            if(20-computerDeck[i].getValue()>min){ // - lerde sorun var
-                                d=i;
-                                computerBoard[tc]=computerDeck[d];
-                                sumVComp+=computerDeck[d].getValue();
-                                tc++;
-                                computerDeck[d]=null;
-                                control=false;
-                                i+=4;
-                        }
-                    }else{
-                        if(20+computerDeck[i].getValue()>min){
-                            d=i;
-                            computerBoard[tc]=computerDeck[d];
-                            sumVComp+=computerDeck[d].getValue();
-                            tc++;
-                            computerDeck[d]=null;
-                            control=false;
-                            i+=4;
-                        }
-                    }
-                    }
-                }if(computerDeck[0]==null && computerDeck[1]==null && computerDeck[2]==null && computerDeck[3]==null){
-                    if(sumVComp+gameDeck[cardCounter].getValue()<=20){
-                        sumVComp+=gameDeck[cardCounter].getValue();
-                        computerBoard[tc]=gameDeck[cardCounter];
-                        tc++;
-                        cardCounter++;
-                    }
-                }
-            }
-                        else if(sumVComp>20){
-                            for(int i =0; i<4; i++){
-                            if(i==3) a=false;
-                            if(computerDeck[i]==null){
-                            continue;
-                        }
-                        if(computerDeck[i].getColor()=="FLIP"){
-                            if((computerDeck[i].getValue()*-1)+sumVPlay<20){
-                                computerBoard[tc]=computerDeck[i];
-                                sumVComp -= computerBoard[tc-1].getValue();
-                                computerDeck[i]=null;
-                                tc++;
-                                c = true;
-                                i+=4;
-                                }
-                            }
-                        }
-                    }
-                    else{
-                        if(controlPlayerStop==0 && sumVComp>sumVPlay){
-                        System.out.println("Computer Did Not Play Cards");
-                        controlComputerNo=0;
-                        controlComputerStop=0;
-                        }
-                        else if(controlPlayerStop==0 && sumVComp==sumVPlay){
-                            if(sumVComp+gameDeck[cardCounter].getValue()>20 && sumVComp+computerBoard[computerCCounter].getValue()>20){
-                                System.out.println("Computer Did Not Play Cards");
-                                controlComputerNo=0;
-                                controlComputerStop=0;
-                            }
-                        else{
-                            sumVComp+=gameDeck[cardCounter].getValue();
-                            computerBoard[tc]=gameDeck[cardCounter];
-                            tc++;
-                            cardCounter++;
-                    }
-                }
-            }
+                break;
+            case 3:
+                System.out.println("The player did not play a card. Waiting for the computer to finish.");
+                break;
         }
     }
-    
-        public static void main(String[] args){
-            Decks accessD = new Decks();
-            computerDeck = accessD.computerDeck;
-            playerDeck = accessD.playerDeck;
-            gameDeck = accessD.tableDeck;
-            accessD.PrintBeforeShuffle();
-            accessD.Shuffle();
-            accessD.dealCard();
-            accessD.GameCards();
-            int a = 0;
-            while(sumScoreComputer<3 && sumScorePlayer<3){
-                if(a==0){ cardPrint(); 
-                    a++;
-                }
-                if(controlPlayerStop==1 && sumVComp<=20){
-                    PlayerUseCard(playerBoard);
-                }
-                if(controlComputerStop==1 && sumVPlay<=20){
-                    if(controlComputerNo==1){
-                        ComputerUseCard(computerBoard);//- kart atılırsa o kısma bak bi > sumplay
-                    }
-                else break;
-                }
-                if(playerBoard[8]!=null){
-                        cardPrint();
-                            System.out.println("Player reaches maximum number of cards");
-                            break;
-                        }else{
-                            cardPrint();
-                        }
-                    if(controlPlayerStop==0 &&controlComputerStop==0){
-                        controlWinner(sumVComp, sumVPlay);
-                        whoWin(sumScoreComputer, sumScorePlayer);
-                        controlPlayerStop=1;
-                        controlComputerStop=1;
-                        controlComputerNo=1;
-                }
+    public static void computerUseCard(){
+        Random rd = new Random(System.currentTimeMillis());
+        int select = rd.nextInt(0,2);
+        if(select==0){ // burada kartı çekecek
+            computerBoard[computerCardCounter] = gameDeck[deckCardCounter];
+            if(gameDeck[deckCardCounter].getColor()=="DOUBLE(X)") sumValueComputer+=computerBoard[computerCardCounter-1].getValue();
+            else if(gameDeck[deckCardCounter].getColor()=="FLIP(X)") sumValueComputer-=computerBoard[computerCardCounter-1].getValue();
+            else sumValueComputer+=computerBoard[computerCardCounter].getValue();
+            deckCardCounter++;
+            computerCardCounter++;
+        }else{  //burada kartı atacak
+            int selectCard = rd.nextInt(0,4);
+            while(computerDeck[selectCard]==null){
+                selectCard = rd.nextInt(0,4);
             }
+            computerBoard[computerCardCounter]=computerDeck[selectCard];
+            if(computerDeck[selectCard].getColor()=="DOUBLE(X)") sumValueComputer+=computerBoard[computerCardCounter-1].getValue();
+            else if(computerDeck[selectCard].getColor()=="FLIP(X)") sumValueComputer-=computerBoard[computerCardCounter-1].getValue();
+            else sumValueComputer+=computerBoard[computerCardCounter].getValue();
+            computerDeck[selectCard]=null;
+            computerCardCounter++;
+        }
+    }
+    public static void main(String[] args){
+        Deck deck = new Deck();
+        computerDeck = deck.computerDeckRandom4;
+        playerDeck = deck.playerDeckRandom4;
+        gameDeck = deck.boardDeck;
+        deck.PrintBeforeShuffle();
+        deck.Shuffle();
+        deck.DealCard();
+        deck.randomCards();
+        deck.SelectRandomCard();
+        PrintCard();
+        int i = 0;
+        while(i<10){
+        playerUseCard();
+        computerUseCard();
+        PrintCard();
+        i++;
+        }
         }
     }

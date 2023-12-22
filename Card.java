@@ -1,23 +1,23 @@
 public class Card {
-    private String color;
-    private int value;
+    private String colors;
+    private int values;
     
-    public Card(String color, int value){ // bu kısım herhangi bir değer almıyor
-        this.color = color;
-        this.value = value;
+    public Card(String color, int value){
+        colors = color;
+        values = value;
     }
     public Card(){   
     }
     public String getColor(){
-        return color;
+        return colors;
     }
     public void setColor(String color){
-        this.color = color;
+        color = colors;
     }
     public int getValue(){
-        return value;
+        return values;
     }
     public void setValue(int value){
-        this.value = value;
+        values = value;
     }
 }
