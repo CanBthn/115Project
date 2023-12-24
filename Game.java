@@ -10,11 +10,11 @@ public class Game{
     static int sumScoreComputer = 0;
     static int sumValuePlayer = 0;
     static int sumValueComputer = 0;
-    static int deckCardCounter = 0; //Destede kaçıncı kartın çekileceğini bize söyleyecek
+    static int deckCardCounter = 0;
     static int playerCardCounter = 1;
     static int computerCardCounter = 1;
-    static int playerStop = 0; // oyuncu 3 e basarsa
-    static int computerStop = 0; //artık kart atmayacaksa
+    static int playerStop = 0;
+    static int computerStop = 0;
     static int roundControl = 0;
     static int printControl = 0; 
     static int wrongControl=0;
@@ -118,10 +118,10 @@ public class Game{
         if(sumValueComputer<20){
             for(int i = 0; i<4; i++){
                 if(computerDeck[i]==null) System.out.println(" ");
-                else if(computerDeck[i].getColor()=="B" & sumValueComputer+computerDeck[i].getValue()<=20){
+                else if(computerDeck[i].getColor()=="B" && sumValueComputer+computerDeck[i].getValue()<=20){
                     for(int n = 0; n<4; n++){
                         if(computerDeck[n]==null) System.out.println(" ");
-                        else if(computerDeck[n].getColor()=="B" & computerDeck[i].getValue()>computerDeck[n].getValue()){
+                        else if(computerDeck[n].getColor()=="B" && computerDeck[i].getValue()>computerDeck[n].getValue()){
                             control2=1;
                             control3=i;
                             break;
@@ -134,14 +134,14 @@ public class Game{
                 control=1;
             }
             if(control==0){
-                if(select==0){ // burada kartı çekecek
+                if(select==0){
                     computerBoard[computerCardCounter] = gameDeck[deckCardCounter];
                     if(gameDeck[deckCardCounter].getColor()=="DOUBLE(X)") sumValueComputer+=computerBoard[computerCardCounter-1].getValue();
                     else if(gameDeck[deckCardCounter].getColor()=="FLIP(X)") sumValueComputer-=computerBoard[computerCardCounter-1].getValue();
                     else sumValueComputer+=computerBoard[computerCardCounter].getValue();
                     deckCardCounter++;
                     computerCardCounter++;
-                }else{  //burada kartı atacak
+                }else{
                     int selectCard = rd.nextInt(0,4);
                     while(computerDeck[selectCard]==null){
                         selectCard = rd.nextInt(0,4);
@@ -171,7 +171,7 @@ public class Game{
                 if(playerBoard[i].getColor()=="B") sumPlayer+=playerBoard[i].getValue();
             }if(sumPlayer==20) sumScorePlayer+=3;
         }
-        if(sumValuePlayer>20 || sumValueComputer>20){  // 20 den herhangi biri büyük olursa bi anda bitir
+        if(sumValuePlayer>20 || sumValueComputer>20){
             if(sumValuePlayer>20) {
                 System.out.println("COMPUTER +1 SCORE");
                 sumScoreComputer++;
@@ -183,7 +183,7 @@ public class Game{
             roundControl = 1;
             printCard=1;
             System.out.print("************\nRESULT DECK");
-        }else if(playerStop==1 && computerStop==1){     //eğer ikisi de kart oynamyacaksa bak bakalım
+        }else if(playerStop==1 && computerStop==1){
             if(sumValuePlayer-sumValueComputer<0) sumScoreComputer++;
             else if(sumValuePlayer-sumValueComputer>0) sumScorePlayer++;
             else System.out.println("Scores equal score unchanged");

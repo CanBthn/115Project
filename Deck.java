@@ -11,7 +11,7 @@ public class Deck{
     Card[] playerDeckRandom4 = new Card[4];
     Card[] computerDeckRandom4 = new Card[4];
 
-    private String[] colors = {"B", "B", "Y", "B"};  // RED GREEN YELLOW BLUE
+    private String[] colors = {"R", "G", "Y", "B"};  // RED GREEN YELLOW BLUE
     //private String[] colors = {"B", "B", "B", "B"};  // Control BlueJack(sumValue=20) Win Game
     private String[] signs = {"+", "-", ""};
 
